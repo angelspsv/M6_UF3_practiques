@@ -1,0 +1,1 @@
+arr_imatges_files = [];
