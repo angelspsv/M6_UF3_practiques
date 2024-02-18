@@ -31,12 +31,51 @@ document.addEventListener('DOMContentLoaded', () => {
         files = files.concat(Array.from(event.dataTransfer.files));
 
         // funció per mostrar els fitxers
-        
+        showPreview();
     });
 
+    // carega els fitxers al fer clic en el botó
+    button.addEventListener('click', () => {
+        input.click();
+    });
 
+    // per caregar els fitxers quan es seleccionen des del botó de selecció
+    input.addEventListener('change', () => {
+        // concatenar els fitxers seleccionats amb els ja existents
+        files = files.concat(Array.from(input.files));
 
+        // Mostrar la vista previa dels fitxers
+        showPreview();
+    });
 
+    // Funció per mostrar la vista previa dels fitxers
+    function showPreview() {
+        preview.innerHTML = '';
+        files.forEach((file, index) => {
+            const reader = new FileReader();
 
+            reader.onload = () => {
+                const imgContainer = document.createElement('div');
+                imgContainer.classList.add('previewImage');
+
+                const img = document.createElement('img');
+                img.src = reader.result;
+
+                const removeBtn = document.createElement('button');
+                removeBtn.classList.add('removeBtn');
+                removeBtn.textContent = 'x';
+                removeBtn.addEventListener('click', () => {
+                    files.splice(index, 1);
+                    showPreview();
+                });
+
+                imgContainer.appendChild(img);
+                imgContainer.appendChild(removeBtn);
+                preview.appendChild(imgContainer);
+            };
+
+            reader.readAsDataURL(file);
+        });
+    }
 
 });
