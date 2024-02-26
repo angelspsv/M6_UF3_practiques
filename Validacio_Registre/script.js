@@ -2,6 +2,7 @@
 let form = document.getElementById('registroForm');
 let nomInput = document.getElementById('nom');
 let emailInput = document.getElementById('email');
+let passwordInput = document.getElementById('password');
 
 //funció per validar l'entrada de nom
 function validarNom(){
@@ -31,8 +32,17 @@ function validarMail(){
   }
 }
 
-
-
+function validaContrasenya(){
+  //per obtenir el valor del camp password i eliminar si hi ha camps en blanc
+  let passwordValue = passwordInput.value.trim();
+  let passwordLength = passwordValue.length;
+  let passwd = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[`!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?~])[A-Za-z\d@$!%*?&]/.test(passwordValue);
+  if ((passwordLength > 7 && passwordLength < 16) && (passwd)){
+    passwdCorrecte(passwordInput);
+  } else {
+    passwdError(passwordInput, 'Contrasenya invàlida')
+  }
+}
 
 
     
@@ -42,6 +52,11 @@ function nomError(entrada, message) {
 }  
 
 function mailError(entrada, message) {
+  entrada.nextElementSibling.innerText = message;
+  entrada.classList.add('error');
+}
+
+function passwdError(entrada, message) {
   entrada.nextElementSibling.innerText = message;
   entrada.classList.add('error');
 }
@@ -58,8 +73,15 @@ function mailCorrecte(entrada) {
   entrada.classList.add('success');
 }
 
+function passwdCorrecte(entrada) {
+  entrada.nextElementSibling.innerText = '';
+  entrada.classList.remove('error');
+  entrada.classList.add('success');
+}
+
 nomInput.addEventListener('focusout', validarNom);
 emailInput.addEventListener('focusout', validarMail);
+passwordInput.addEventListener('focusout', validaContrasenya);
     
 
 form.addEventListener('submit', function(event) {
@@ -68,10 +90,11 @@ form.addEventListener('submit', function(event) {
   // Validar tots els camps novament abans de l'enviar al servidor
   validarNom();
   validarMail();
+  validaContrasenya();
         
 
   // Si tot es valid s'envia
-  if (!nomInput.classList.contains('error') && !emailInput.classList.contains('error')) {
+  if (!nomInput.classList.contains('error') && !emailInput.classList.contains('error') && !passwordInput.classList.contains('error')) {
     console.log('Formulario válido. Enviar datos al servidor...');
   }
 });
