@@ -2,6 +2,11 @@
     background-color: rgb(239, 122, 122);
 }
 
+span {
+    color: red; 
+    background-color: white;
+}
+
 .success {
     background-color: aquamarine;
 }
